@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mini-redis-go/config"
 	"mini-redis-go/lib/logger"
+	"mini-redis-go/resp/handler"
 	"mini-redis-go/tcp"
 	"os"
 )
@@ -36,7 +37,7 @@ func main() {
 		&tcp.Config{
 			Address: fmt.Sprintf("%s:%d", config.Properties.Bind, config.Properties.Port),
 		},
-		tcp.MakeHandler())
+		handler.MakeHandler())
 	if err != nil {
 		logger.Error(err)
 	}

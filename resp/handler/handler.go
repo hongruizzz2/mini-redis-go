@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"io"
+	"mini-redis-go/database"
 	databaseface "mini-redis-go/interface/Database"
 	"mini-redis-go/lib/logger"
 	"mini-redis-go/lib/sync/atomic"
@@ -14,10 +15,22 @@ import (
 	"sync"
 )
 
+var (
+	unknownErrReplyBytes = []byte("-ERR unknown\r\n")
+)
+
 type RespHandler struct {
 	activeConn sync.Map
 	db         databaseface.Database
 	closing    atomic.Boolean
+}
+
+func MakeHandler() *RespHandler {
+	var db databaseface.Database
+	db = database.NewEchoDatabase()
+	return &RespHandler{
+		db: db,
+	}
 }
 
 func (r *RespHandler) closeClient(client *connection.Connection) {
@@ -53,6 +66,20 @@ func (r *RespHandler) Handle(ctx context.Context, conn net.Conn) {
 			continue
 		}
 		// exec
+		if payload.Data == nil {
+			continue
+		}
+		reply, ok := payload.Data.(*reply.MultiBulkReply)
+		if !ok {
+			logger.Error("require multi bulk reply")
+			continue
+		}
+		result := r.db.Exec(client, reply.Args)
+		if result != nil {
+			_ = client.Write(result.ToBytes())
+		} else {
+			_ = client.Write(unknownErrReplyBytes)
+		}
 	}
 }
 
