@@ -5,8 +5,12 @@ type PongReply struct {
 
 var pongbytes = []byte("+PONG\r\n")
 
-func (p *PongReply) ToBytes() []byte {
+func (r *PongReply) ToBytes() []byte {
 	return pongbytes
+}
+
+func MakePongReply() *PongReply {
+	return &PongReply{}
 }
 
 func MakePingReply() *PongReply {
