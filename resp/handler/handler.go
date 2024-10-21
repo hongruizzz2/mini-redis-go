@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 	"mini-redis-go/database"
-	databaseface "mini-redis-go/interface/Database"
+	databaseface "mini-redis-go/interface/database"
 	"mini-redis-go/lib/logger"
 	"mini-redis-go/lib/sync/atomic"
 	"mini-redis-go/resp/connection"
@@ -27,7 +27,7 @@ type RespHandler struct {
 
 func MakeHandler() *RespHandler {
 	var db databaseface.Database
-	db = database.NewEchoDatabase()
+	db = database.NewDatabase()
 	return &RespHandler{
 		db: db,
 	}

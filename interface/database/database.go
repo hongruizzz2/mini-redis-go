@@ -1,4 +1,4 @@
-package Database
+package database
 
 import "mini-redis-go/interface/resp"
 

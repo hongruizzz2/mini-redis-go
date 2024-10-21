@@ -76,3 +76,10 @@ func (r *ProtocolErrReply) ToBytes() []byte {
 func (r *ProtocolErrReply) Error() string {
 	return "ERR Protocol error '" + r.Msg + "' command"
 }
+
+// MakeArgNumErrReply represents wrong number of arguments for command
+func MakeArgNumErrReply(cmd string) *ArgNumErrReply {
+	return &ArgNumErrReply{
+		Cmd: cmd,
+	}
+}
