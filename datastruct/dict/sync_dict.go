@@ -104,7 +104,7 @@ func (dict *SyncDict) RandomDistinctKeys(limit int) []string {
 	return result
 }
 
-func (dict *SyncDict) clear() {
+func (dict *SyncDict) Clear() {
 	// create a new dict to implete clear function
 	// the old dict will be GC
 	*dict = *MakeSyncDict()
